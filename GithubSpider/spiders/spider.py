@@ -29,5 +29,7 @@ class GithubTopicSpider(scrapy.Spider):
 		name = response.xpath('//strong[@itemprop="name"]//text()').extract_first()
 		git_url = response.xpath('//clipboard-copy/@value').extract_first()
 
-		self.logger.info(git_url)
+		# Tag
+		tags = response.xpath('//div[@class="list-topics-container f6"]/a/text()').extract()
+		tags = [tag.strip() for tag in tags]
 
