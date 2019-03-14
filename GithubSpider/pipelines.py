@@ -37,7 +37,7 @@ class MySQLPipeline(object):
                "VALUES (%s, %s, %s)")
         repo_data = (item['name'], item['owner_name'], item['repo_url'])
         self.cursor.execute(insert_repo, repo_data)
-        repo_no = cursor.lastrowid
+        repo_no = self.cursor.lastrowid
 
         # Insert tags
         query_tag = ("SELECT tag_no from tags "
@@ -47,12 +47,12 @@ class MySQLPipeline(object):
         insert_repo_tag = ("INSERT INTO repo_tag "
             "(repo_no, tag_no) VALUES (%s, %s)")
         for tag in item['tags']:
-            cursor.execute(query_tag, (tag))
-            (tag_no) = cursor.fetchone()
+            self.cursor.execute(query_tag, (tag))
+            (tag_no) = self.cursor.fetchone()
             if tag_no is None:
-                cursor.execute(insert_tag, (tag))
-                tag_no = cursor.lastrowid
-            cursor.execute(insert_repo_tag, (repo_no, tag_no))
+                self.cursor.execute(insert_tag, (tag))
+                tag_no = self.cursor.lastrowid
+            self.cursor.execute(insert_repo_tag, (repo_no, tag_no))
 
 
 
