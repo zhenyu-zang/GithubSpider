@@ -24,7 +24,7 @@ class MySQLPipeline(object):
 
     def open_spider(self, spider):
         self.db = mysql.connector.connect(**self.mysql_conn_info)
-        self.cursor = db.cursor()
+        self.cursor = self.db.cursor()
 
     def close_spider(self, spider):
         self.cursor.close()
