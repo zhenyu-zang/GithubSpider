@@ -16,5 +16,5 @@ class GithubspiderItem(scrapy.Item):
 class GithubRepoItem(scrapy.Item):
 	name = scrapy.Field()
 	owner_name = scrapy.Field()
-	git_url = scrapy.Field()
+	repo_url = scrapy.Field()
 	tags = scrapy.Field()

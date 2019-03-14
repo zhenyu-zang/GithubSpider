@@ -28,8 +28,8 @@ class GithubTopicSpider(scrapy.Spider):
     def parse_repo(self, response):
         self.repo_cnt += 1
         name = response.xpath('//strong[@itemprop="name"]//text()').extract_first()
-        git_url = response.xpath('//clipboard-copy/@value').extract_first()
-        owner_name = git_url.split('/')[3]
+        repo_url = response.xpath('//clipboard-copy/@value').extract_first()
+        owner_name = repo_url.split('/')[3]
         # Tag
         tags = response.xpath('//div[@class="list-topics-container f6"]/a/text()').extract()
         tags = [tag.strip() for tag in tags]
@@ -37,6 +37,6 @@ class GithubTopicSpider(scrapy.Spider):
         repo_item = GithubRepoItem()
         repo_item['name'] = name
         repo_item['owner_name'] = owner_name
-        repo_item['git_url'] = git_url
+        repo_item['repo_url'] = repo_url
         repo_item['tags'] = tags
         yield repo_item

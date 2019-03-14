@@ -33,9 +33,9 @@ class MySQLPipeline(object):
     def process_item(self, item, spider):
         # Insert repo
         insert_repo = ("INSERT INTO repos "
-               "(repo_name, owner_name, git_url) "
+               "(repo_name, owner_name, repo_url) "
                "VALUES (%s, %s, %s)")
-        repo_data = (item['name'], item['owner_name'], item['git_url'])
+        repo_data = (item['name'], item['owner_name'], item['repo_url'])
         self.cursor.execute(insert_repo, repo_data)
         repo_no = cursor.lastrowid
 
