@@ -46,7 +46,7 @@ class MySQLPipeline(object):
 
         # Insert tags
         query_tag = ("SELECT tag_no from tags "
-            "WHERE tag_name=%s")
+            "WHERE tag_name='%s'")
         insert_tag = ("INSERT INTO TAGS "
             "(tag_name) VALUES (%s)")
         insert_repo_tag = ("INSERT INTO repo_tag "
