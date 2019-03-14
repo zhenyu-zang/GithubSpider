@@ -8,6 +8,7 @@
 import os
 import json
 import mysql.connector
+from mysql.connector import errorcode
 
 class GithubspiderPipeline(object):
     def process_item(self, item, spider):
@@ -36,8 +37,12 @@ class MySQLPipeline(object):
                "(repo_name, owner_name, repo_url) "
                "VALUES (%s, %s, %s)")
         repo_data = (item['name'], item['owner_name'], item['repo_url'])
-        self.cursor.execute(insert_repo, repo_data)
-        repo_no = self.cursor.lastrowid
+        try:
+            self.cursor.execute(insert_repo, repo_data)
+            repo_no = self.cursor.lastrowid
+        except mysql.connector.Error as err:
+            raise DropItem("Failed to insert repo: {}".format(err))
+
 
         # Insert tags
         query_tag = ("SELECT tag_no from tags "
@@ -52,8 +57,11 @@ class MySQLPipeline(object):
             if tag_no is None:
                 self.cursor.execute(insert_tag, (tag))
                 tag_no = self.cursor.lastrowid
-            self.cursor.execute(insert_repo_tag, (repo_no, tag_no))
+            try:
+                self.cursor.execute(insert_repo_tag, (repo_no, tag_no))
+            except mysql.connector.Error as err:
+                raise DropItem("Failed to insert tag: {}".format(err))
 
-
+        self.db.commit()
 
         return item
