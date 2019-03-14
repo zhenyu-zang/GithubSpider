@@ -12,3 +12,9 @@ class GithubspiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass
+
+class GithubRepoItem(scrapy.Item):
+	name = scrapy.Field()
+	owner_name = scrapy.Field()
+	git_url = scrapy.Field()
+	tags = scrapy.Field()
