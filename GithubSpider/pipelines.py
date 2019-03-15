@@ -44,7 +44,6 @@ class MySQLPipeline(object):
         except mysql.connector.Error as err:
             raise DropItem("Failed to insert repo: {}".format(err))
 
-
         # Insert tags
         query_tag = ("SELECT tag_no FROM tags "
             "WHERE tag_name = %s")
@@ -54,10 +53,12 @@ class MySQLPipeline(object):
             "(repo_no, tag_no) VALUES (%s, %s)")
         for tag in item['tags']:
             self.cursor.execute(query_tag, (tag,))
-            (tag_no) = self.cursor.fetchone()
-            if tag_no is None:
+            row = self.cursor.fetchone()
+            if row is None:
                 self.cursor.execute(insert_tag, (tag,))
                 tag_no = self.cursor.lastrowid
+            else:
+                tag_no = row[0]
             try:
                 self.cursor.execute(insert_repo_tag, (repo_no, tag_no))
             except mysql.connector.Error as err:
