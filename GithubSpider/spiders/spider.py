@@ -7,9 +7,9 @@ class GithubTopicSpider(scrapy.Spider):
     page_cnt = 0
 
     def start_requests(self):
-        if self.topic is None:
+        if hasattr(self, 'topic'):
             self.topic = 'ros'
-        if self.max_page is None:
+        if hasattr(self, 'max_page'):
             self.max_page = 1
         yield scrapy.Request('https://github.com/topics/'+self.topic)
 
