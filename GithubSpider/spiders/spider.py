@@ -11,6 +11,8 @@ class GithubTopicSpider(scrapy.Spider):
             self.topic = 'ros'
         if not hasattr(self, 'max_page'):
             self.max_page = 1
+        else:
+            self.max_page = int(self.max_page)
         yield scrapy.Request('https://github.com/topics/'+self.topic)
 
     def parse(self, response):
