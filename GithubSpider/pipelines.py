@@ -63,7 +63,8 @@ class MySQLPipeline(object):
                 self.cursor.execute(insert_repo_tag, (repo_no, tag_no))
             except mysql.connector.Error as err:
                 raise DropItem("Failed to insert tag: {}".format(err))
+            spider.logger.info("Inserted new tag: {}.".format(tag))
 
         self.db.commit()
 
-        return item
+        raise DropItem("Inerted new repo: {}.".format(item['name']))
