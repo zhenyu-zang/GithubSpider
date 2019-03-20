@@ -8,17 +8,20 @@ class GithubTopicSpider(scrapy.Spider):
 
     def start_requests(self):
         if self.topic is None:
-            self.topic = 'java'
+            self.topic = 'ros'
+        if self.max_page is None:
+            self.max_page = 1
         yield scrapy.Request('https://github.com/topics/'+self.topic)
 
     def parse(self, response):
         self.page_cnt += 1
+        if self.page_cnt > self.max_page:
+            return
 
         for art in response.xpath('//article'):
             url_suffix = art.xpath('div[@class="d-flex flex-justify-between flex-items-start mb-1"]/h3/a/@href').extract_first()
             url = response.urljoin(url_suffix)
             yield scrapy.Request(url, callback=self.parse_repo)
-        return
         url = response.url
         formxpath = '//form[@class="ajax-pagination-form js-ajax-pagination"]'
         # Load More
